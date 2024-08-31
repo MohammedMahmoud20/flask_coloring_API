@@ -28,10 +28,10 @@ def predict_image(img_array):
     return "Non-ASD" if prediction[0][0] > 0.5 else "ASD"
 @app.route('/predict', methods=['POST'])
 def predict():
-    if 'image' not in request.files:
+    if 'image' not in request.file:
         return jsonify({"error": "No image provided"}), 400
 
-    img_file = request.files['image']
+    img_file = request.file['image']
     img_path = os.path.join('uploads', img_file.filename)
     os.makedirs(os.path.dirname(img_path), exist_ok=True)
     img_file.save(img_path)
@@ -41,9 +41,6 @@ def predict():
 
     return jsonify({"prediction": prediction})
 
-@app.route('/')
-def index():
-    return render_template('index.html')
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
